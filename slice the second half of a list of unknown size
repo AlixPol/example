@@ -1,2 +1,3 @@
+list = [None] * integer unknown #create list for fixed size of memory
 x = list
 print (x[int((len(x)/2)):])
