@@ -23,8 +23,10 @@ email_user = 'sender@mail.mail'
 email_password = 'pass'
 smtpObj = smtplib.SMTP_SSL('smtp.mail.ru', 465)
 smtpObj.login(email_user, email_password)
-
-while True:
+sole_request = 0
+while sole_request < 30:
   smtpObj.sendmail(email_user, "example@mail.mail", message)
 print ('next')
 time.sleep(86400)
+sole_request += 1
+print ('end')
