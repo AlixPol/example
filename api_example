@@ -1,0 +1,30 @@
+import urllib.request
+import json
+import smtplib
+import time
+
+api_key = "Key"
+city = input(''}
+url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+
+try:
+  with urllib.request.urlopen(url) as response:
+    data = response.read()
+  data = json.loads(data)
+  print(response.status)
+  print(data)
+  temperature = data["main"]["temp"]
+  temperature_celsius = (temperature - 273.15)
+  weather_description = data["weather"][0]["description"]
+  message = f"Temperature in {city}: {temperature_celsius:.2f} C\nWeather description: {weather_description}"
+except urllib.error.HTTPError as e:
+  print(f"Ошибка HTTP: {e}")
+email_user = 'sender@mail.mail'
+email_password = 'pass'
+smtpObj = smtplib.SMTP_SSL('smtp.mail.ru', 465)
+smtpObj.login(email_user, email_password)
+
+while True:
+  smtpObj.sendmail(email_user, "example@mail.mail", message)
+print ('next')
+time.sleep(86400)
