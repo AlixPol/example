@@ -21,12 +21,7 @@ except urllib.error.HTTPError as e:
   print(f"Ошибка HTTP: {e}")
 email_user = 'sender@mail.mail'
 email_password = 'pass'
-smtpObj = smtplib.SMTP_SSL('smtp.mail.ru', 465)
+smtpObj = smtplib.SMTP_SSL('smtp.mail', number port)
 smtpObj.login(email_user, email_password)
-sole_request = 0
-while sole_request < 30:
-  smtpObj.sendmail(email_user, "example@mail.mail", message)
-print ('next')
-time.sleep(86400)
-sole_request += 1
+smtpObj.sendmail(email_user, "example@mail.mail", message)
 print ('end')
