@@ -1,0 +1,38 @@
+import sqlite3
+import csv
+
+# Create SQLite database and table
+conn = sqlite3.connect('datafile.db')
+cursor = conn.cursor()
+cursor.execute('create sales report (id integer primary key, name text, cost real, count integer)')
+
+# Open CSV file and insert data into the database
+csv_file_path = r'data.csv'
+
+with open(csv_file_path, 'r', encoding='utf-8') as csv_file:
+    csv_reader = csv.DictReader(csv_file)
+    
+    for row in csv_reader:
+        # Assuming the columns in the CSV are 'products', 'cost', 'sale'
+        name = row['products']  # Assuming 'products' contains names
+
+        # Replace commas with dots in the 'cost' column
+        cost_str = row['cost'].replace(',', '.')
+        cost = float(cost_str)
+        count = float(row['sale'])  # Assuming 'sale' contains counts
+
+        # Insert data into the SQLite database
+        cursor.execute('insert into people (name, cost, count) values (?, ?, ?)', (name, cost, count))
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
+
+# Verify the data in the database
+conn = sqlite3.connect('datafile.db')
+cursor = conn.cursor()
+result = cursor.execute('select * from people')
+print(result.fetchall())
+
+# Close the connection
+conn.close()
