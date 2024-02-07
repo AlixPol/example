@@ -1,24 +1,47 @@
+#import sqlite3
+#import os
+
+#with open ("D:\pr3sql\data.csv", encoding='utf-8') as dates:
+#    print (dates)
+#conn = sqlite3.connect('datafile.db')
+#cursor = conn.cursor()
+#cursor
+#cursor.execute('create table people (id integer primary key, name text, count integer)')
+
+#cursor.execute('insert into people (name, count) values ("Bob", 1)')
+
+#cursor.execute('insert into people (name, count) values (?, ?)',
+#               ("Jill", 15))
+
+#cursor.execute('insert into people (name, count) values (:username, \
+#               :usercount)', {'username': 'Joe', 'usercount': 10})
+
+#conn.commit()
+#result = cursor.execute('select * from people')
+#print(result.fetchall())
+
 import sqlite3
 import csv
 
 # Create SQLite database and table
 conn = sqlite3.connect('datafile.db')
 cursor = conn.cursor()
-cursor.execute('create sales report (id integer primary key, name text, cost real, count integer)')
+cursor.execute('create table people (id integer primary key, name text, cost real, count integer)')
 
 # Open CSV file and insert data into the database
-csv_file_path = r'data.csv'
+csv_file_path = r'D:\pr3sql\data.csv'
 
 with open(csv_file_path, 'r', encoding='utf-8') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     
     for row in csv_reader:
         # Assuming the columns in the CSV are 'products', 'cost', 'sale'
-        name = row['products']  # Assuming 'products' contains names
+        name = row['products']  # Assuming 'products' contains names like 'Joe', 'Bob', 'Jill'
 
         # Replace commas with dots in the 'cost' column
         cost_str = row['cost'].replace(',', '.')
         cost = float(cost_str)
+
         count = float(row['sale'])  # Assuming 'sale' contains counts
 
         # Insert data into the SQLite database
@@ -27,11 +50,57 @@ with open(csv_file_path, 'r', encoding='utf-8') as csv_file:
 # Commit the changes and close the connection
 conn.commit()
 conn.close()
+csv_file.close()
 
 # Verify the data in the database
 conn = sqlite3.connect('datafile.db')
 cursor = conn.cursor()
 result = cursor.execute('select * from people')
+print(result.fetchall())
+
+# Close the connection
+conn.close()
+
+
+# Create or connect to the SQLite database and table
+conn = sqlite3.connect('datafile.db')
+cursor = conn.cursor()
+cursor.execute('create table if not exists people (id integer primary key, name text, cost real, count integer)')
+
+# Open CSV file (update) and insert/update data in the database
+csv_update_path = r'D:\pr3sql\data_update.csv'
+
+with open(csv_update_path, 'r', encoding='utf-8') as csv_update_file:
+    csv_update_reader = csv.DictReader(csv_update_file)
+
+    for row in csv_update_reader:
+        # Assuming the columns in the CSV are 'products', 'cost', 'sale'
+        name = row['products']  # Assuming 'products' contains names like 'Joe', 'Bob', 'Jill'
+
+        # Replace commas with dots in the 'cost' column
+        cost_str = row['cost'].replace(',', '.')
+        cost = float(cost_str)
+
+        count = float(row['sale'])  # Assuming 'sale' contains counts
+
+        # Insert or update data in the SQLite database
+        cursor.execute('INSERT OR REPLACE INTO people (name, cost, count) VALUES (?, ?, ?)', (name, cost, count))
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
+
+# Verify the updated data in the database
+conn = sqlite3.connect('datafile.db')
+cursor = conn.cursor()
+result = cursor.execute('SELECT * FROM people')
+print(result.fetchall())
+
+# Close the connection
+conn.close()
+
+print('end')
+
 print(result.fetchall())
 
 # Close the connection
