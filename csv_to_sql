@@ -99,8 +99,6 @@ print(result.fetchall())
 # Close the connection
 conn.close()
 
-print('end')
-
 print(result.fetchall())
 
 # Close the connection
