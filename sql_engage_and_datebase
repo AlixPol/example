@@ -21,7 +21,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 metadata.create_all(engine)
 
-product_info = {'product': 'Bob', 'cost': 1, 'sale': 3}
+product_info = {'product': 'Lemon', 'cost': 1, 'sale': 3}
 product_info['profit'] = product_info['sale'] - product_info['cost']
 people_ins = people.insert().values(**product_info)
 session.execute(people_ins)
@@ -29,8 +29,8 @@ session.commit()
 
 # adding multiple records
 products = [
-    {'product': 'Jill', 'cost': 15, 'sale': 20},
-    {'product': 'Joe', 'cost': 10, 'sale': 70}
+    {'product': 'Grapefruit', 'cost': 15, 'sale': 20},
+    {'product': 'Mandarin', 'cost': 10, 'sale': 70}
 ]
 
 for product in products:
